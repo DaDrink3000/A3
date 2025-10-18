@@ -5,7 +5,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Install Flask (you can add more libs later)
-RUN pip install --no-cache-dir flask
+RUN pip install --no-cache-dir flask cryptography
 
 # Copy your app file into the image
 COPY main.py /app/main.py
