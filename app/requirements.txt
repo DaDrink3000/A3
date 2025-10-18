@@ -1,2 +1,2 @@
 flask>=3.0.0,<4
-cryptography>=42,<44
+cryptography>=44.0.1,<45
