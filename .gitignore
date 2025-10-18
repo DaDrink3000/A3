@@ -5,3 +5,4 @@ __pycache__/
 # Keys/certs – do NOT commit private material
 infra/nginx/certs/
 keys/
+.env
