@@ -1,0 +1,38 @@
+name: Security CI (deps & secrets)
+
+on:
+  pull_request:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deps-and-secrets:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+
+      # --- Python dependency audit (pip-audit)
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install --upgrade pip pip-audit
+      # If you have a requirements.txt, replace the next line with: pip-audit -r requirements.txt --strict
+      - run: pip-audit --strict || (echo "::error ::Dependency vulnerabilities found" && exit 1)
+
+      # --- Secret scan (gitleaks)
+      - uses: gitleaks/gitleaks-action@v2
+        with:
+          args: --no-banner -v
+        continue-on-error: false
+
+      # --- Trivy FS scan (Dockerfiles / OS packages)
+      - uses: aquasecurity/trivy-action@0.24.0
+        with:
+          scan-type: fs
+          ignore-unfixed: true
+          format: 'table'
+          exit-code: '1'          # fail job on HIGH/CRITICAL
+          vuln-type: 'os,library'
+          severity: 'HIGH,CRITICAL'
