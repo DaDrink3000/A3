@@ -19,7 +19,7 @@ jobs:
         with: { python-version: "3.11" }
       - run: pip install --upgrade pip pip-audit
       # If you have a requirements.txt, replace the next line with: pip-audit -r requirements.txt --strict
-      - run: pip-audit --strict || (echo "::error ::Dependency vulnerabilities found" && exit 1)
+      - run: pip-audit -r app/requirements.txt --strict 
 
       # --- Secret scan (gitleaks)
       - uses: gitleaks/gitleaks-action@v2
