@@ -34,7 +34,14 @@ def set_sid_cookie(resp, sid):
     )
 
 def clear_sid_cookie(resp):
-    resp.set_cookie("sid", "", expires=0, path="/")
+    # match the attributes used when setting the cookie
+    resp.delete_cookie(
+        "sid",
+        path="/",
+        secure=True,
+        httponly=True,
+        samesite="Strict",
+    ) 
 
 @app.get("/")
 def home():
