@@ -45,7 +45,7 @@ def clear_sid_cookie(resp):
 
 @app.get("/")
 def home():
-    return "Voting prototype: R08/R12/R15/R17"
+    return "Voting prototype: R03/R08/R12/R14/R15/R17/R19"
 
 @app.get("/login")
 def login():
@@ -86,7 +86,7 @@ def whoami():
 @app.before_request
 def session_guard():
     # public routes
-    if request.path in ("/", "/login", "/logout", "/healthz"):
+    if request.path in ("/", "/login", "/logout", "/healthz", "/token", "/redeem"):
         return
 
     sid = request.cookies.get("sid")
@@ -127,8 +127,16 @@ def session_guard():
 
 @app.after_request
 def apply_headers_and_rotation(resp):
-    resp.headers["X-Content-Type-Options"] = "nosniff"
+    # --- Security Headers (R14) ---
+    resp.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
     resp.headers["X-Frame-Options"] = "DENY"
+    resp.headers["X-Content-Type-Options"] = "nosniff"
+    resp.headers["X-XSS-Protection"] = "1; mode=block"
+    resp.headers["Referrer-Policy"] = "no-referrer"
+    resp.headers["Permissions-Policy"] = "geolocation=(), camera=(), microphone=(), payment=(), usb=()"
+    resp.headers["Expect-CT"] = "max-age=86400, enforce"
+    resp.headers["Content-Security-Policy"] = "default-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self';"
+
     rotated = getattr(request, "_rotated_sid", None)
     if rotated:
         set_sid_cookie(resp, rotated)
@@ -155,6 +163,13 @@ def change_role():
 @app.get("/healthz")
 def healthz():
     return "ok", 200
+
+# --- Register R03 token endpoints ---
+try:
+    from app.routes.tokens import bp as tokens_bp
+    app.register_blueprint(tokens_bp)
+except Exception as e:
+    print("Warning: tokens blueprint not loaded -", e)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
