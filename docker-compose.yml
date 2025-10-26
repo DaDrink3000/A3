@@ -1,12 +1,19 @@
 version: "3.9"
+
 services:
   app:
     build: ./app
     expose: ["8000"]
     environment:
-    - IDLE_TIMEOUT_SECONDS=900        # 15 minutes
-    - ABSOLUTE_TIMEOUT_SECONDS=7200   # 2 hours
-    - ROTATE_EVERY_SECONDS=600        # rotate every 10 minutes (example)
+      - IDLE_TIMEOUT_SECONDS=900        # 15 minutes
+      - ABSOLUTE_TIMEOUT_SECONDS=7200   # 2 hours
+      - ROTATE_EVERY_SECONDS=600        # rotate every 10 minutes (example)
+      - DB_PATH=/app/dbdata/db.sqlite3  # database path for R03 token system
+    volumes:
+      - dbdata:/app/dbdata              # persist database
+      - backups:/app/backups            # share backup storage
+    secrets:
+      - signing_key                     # optional key for secure tokens
 
   nginx:
     image: nginx:stable
@@ -15,3 +22,31 @@ services:
       - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       - ./infra/nginx/certs:/etc/nginx/certs:ro
     depends_on: [app]
+
+  # --- Nightly backup container (R19) ---
+  backup:
+    image: python:3.12-slim
+    volumes:
+      - ./scripts:/scripts:ro
+      - dbdata:/app/dbdata
+      - backups:/app/backups
+    entrypoint: [ "bash", "-lc", "while true; do python /scripts/backup.py; sleep 86400; done" ]
+
+  # --- On-demand restore container (R19) ---
+  restore:
+    image: python:3.12-slim
+    volumes:
+      - ./scripts:/scripts:ro
+      - dbdata:/app/dbdata
+      - backups:/app/backups
+    entrypoint: [ "bash", "-lc", "f=$(ls -1t /app/backups | head -n1); if [ -n \"$f\" ]; then python /scripts/restore.py \"$f\"; else echo 'No backups found'; exit 1; fi" ]
+
+# --- Volumes for persistence ---
+volumes:
+  dbdata:
+  backups:
+
+# --- Secrets (optional, for secure signing keys) ---
+secrets:
+  signing_key:
+    file: ./infra/signing_key.pem
