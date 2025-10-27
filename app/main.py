@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, make_response, jsonify
+from flask import Flask, g, request, redirect, make_response, jsonify
 from datetime import datetime, timezone
 import os, secrets
 from routes.constants import EVENT_REQUEST
@@ -98,11 +98,7 @@ def whoami():
         "last": ctx["last"].isoformat(),
         "sid_suffix": getattr(request, "sid_suffix", "none")
     })
-# --- Register Blueprints ---
-# User endpoints are now mounted at the root URL
-app.register_blueprint(user_bp) 
-# Voting/Core endpoints are also mounted at the root URL
-app.register_blueprint(voting_bp)
+
 @app.before_request
 def before_request():
     """Set up request context - extract user from headers"""

@@ -10,8 +10,8 @@ import os
 # Constants and configuration
 
 # File paths
-DATA_FILE_JSON = '../data/voters.json'
-DATA_FILE_CSV = '../data/voters.csv'
+DATA_FILE_JSON = './app/data/voters.json'
+DATA_FILE_CSV = './app/data/voters.csv'
 LOG_FILE = './logs/voter_lookups.log'
 
 # CSV/JSON column names
