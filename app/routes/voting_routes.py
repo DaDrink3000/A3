@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, g
+from flask import Blueprint, make_response, request, jsonify
 from .constants import * # Assuming constants.py is in the same package
 from .utils import (
     get_client_ip,
@@ -6,7 +6,7 @@ from .utils import (
 )
 from services import IntegrityException # Assuming services is importable
 from key_mgmt import get_encryption_public_key_b64,verify_hmac
-import base64, json, time
+import time
 recent_nonces = set()
 MAX_NONCE_AGE = 60 * 5  
 
@@ -114,21 +114,15 @@ def cast_ballot():
 
     # Proceed to add encrypted ballot
     ballot_service = get_ballot_service()
-    try:
-        ballot = ballot_service.add_ballot(voter_id, ciphertext_b64)
-        total = ballot_service.get_ballot_count()
+    ballot = ballot_service.add_ballot(voter_id, ciphertext_b64)
+    total = ballot_service.get_ballot_count()
 
-        return jsonify({
-            "success": True,
-            "ballot": ballot,
-            "total_ballots": total
-        }), 200
+    return jsonify({
+        "success": True,
+        "ballot": ballot,
+        "total_ballots": total
+    }), 200
 
-    except IntegrityException as e:
-        return jsonify({
-            "success": False,
-            "error": str(e)
-        }), 409
 
 # @voting_bp.route('/ballot', methods=['POST'])
 # def cast_ballot():
@@ -363,22 +357,31 @@ def login():
         method='password'
     )
     
-    return {'success': success}, HTTP_OK if success else 401
+    if success:
+        data = {'success': True}
+        status_code = 200
+    else:
+        data = {'success': False}
+        status_code = 401
 
-@voting_bp.route('/data/<resource_id>', methods=['GET'])
-def get_data(resource_id):
-    #Get data with access audit
-    audit_service = get_audit_service()
-    # Log data access
-    audit_service.log_data_access(
-        user_id=get_user_id(),
-        resource=f"/data/{resource_id}",
-        action='read',
-        ip_address=get_client_ip(),
-        resource_type='document'
-    )
+    response = make_response(jsonify(data), status_code)
     
-    return {'data': f'Resource {resource_id}'}
+    return response
+
+# @voting_bp.route('/data/<resource_id>', methods=['GET'])
+# def get_data(resource_id):
+#     #Get data with access audit
+#     audit_service = get_audit_service()
+#     # Log data access
+#     audit_service.log_data_access(
+#         user_id=get_user_id(),
+#         resource=f"/data/{resource_id}",
+#         action='read',
+#         ip_address=get_client_ip(),
+#         resource_type='document'
+#     )
+    
+#     return {'data': f'Resource {resource_id}'}
 
 @voting_bp.route('/data/<resource_id>', methods=['PUT'])
 def update_data(resource_id):
