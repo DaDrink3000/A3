@@ -4,3 +4,4 @@ flask-talisman>=1.1.0,<2
 pytest>=8.3
 bandit>=1.7
 pip-audit>=2.6
+portalocker>=3.0.0
