@@ -5,6 +5,7 @@ from .utils import (
     get_user_id
 )
 from services import IntegrityException # Assuming services is importable
+from key_mgmt import get_encryption_public_key_b64
 
 # Initialize Blueprint
 voting_bp = Blueprint('voting', __name__)
@@ -51,34 +52,86 @@ def health():
     # Health check - not audited
     return {'status': STATUS_HEALTHY}
 
+#===================== Updated and added code  for R4 ==========================
+@voting_bp.route("/public-key", methods=["GET"])
+def get_public_key():
+    """
+    Expose the public key for client-side sealed-box encryption.
+    Clients use this to encrypt their ballots before submission.
+    """
+    return jsonify({
+        "public_key": get_encryption_public_key_b64()
+    }), 200
 
-# Ballot endpoints
+
+# Modified ballot endpoint
 
 @voting_bp.route('/ballot', methods=['POST'])
-def add_ballot():
-    # Add a new ballot
-    ballot_service = get_ballot_service()
-    data = request.json
-    voter_id = data.get(BALLOT_VOTER_ID)
-    choice = data.get(BALLOT_CHOICE)
-    
-    if not voter_id or not choice:
-        return jsonify({RESP_ERROR: 'voter_id and choice required'}), HTTP_BAD_REQUEST
-    
-    try:
-        ballot = ballot_service.add_ballot(voter_id, choice)
-        total = ballot_service.get_ballot_count()
-        
+def cast_ballot():
+    """
+    Accepts a sealed (encrypted) ballot from the client.
+    The server never sees the plaintext vote.
+    """
+    data = request.get_json(silent=True) or {}
+    voter_id = data.get('voter_id')
+    ciphertext = data.get('ciphertext')
+
+    if not voter_id or not ciphertext:
         return jsonify({
-            RESP_SUCCESS: True,
-            RESP_BALLOT: ballot,
-            RESP_TOTAL_BALLOTS: total
-        })
+            'success': False,
+            'error': 'voter_id and ciphertext required'
+        }), 400
+
+    ballot_service = get_ballot_service()  
+
+    try:
+        ballot = ballot_service.add_ballot(voter_id, ciphertext)
+        total = ballot_service.get_ballot_count()
+
+        return jsonify({
+            'success': True,
+            'ballot': ballot,
+            'total_ballots': total
+        }), 200
+
     except IntegrityException as e:
         return jsonify({
-            RESP_SUCCESS: False,
-            RESP_ERROR: str(e)
-        }), HTTP_CONFLICT
+            'success': False,
+            'error': str(e)
+        }), 409
+
+
+
+
+# # Ballot endpoints
+
+# @voting_bp.route('/ballot', methods=['POST'])
+# def add_ballot():
+#     # Add a new ballot
+#     ballot_service = get_ballot_service()
+#     data = request.json
+#     voter_id = data.get(BALLOT_VOTER_ID)
+#     choice = data.get(BALLOT_CHOICE)
+    
+#     if not voter_id or not choice:
+#         return jsonify({RESP_ERROR: 'voter_id and choice required'}), HTTP_BAD_REQUEST
+    
+#     try:
+#         ballot = ballot_service.add_ballot(voter_id, choice)
+#         total = ballot_service.get_ballot_count()
+        
+#         return jsonify({
+#             RESP_SUCCESS: True,
+#             RESP_BALLOT: ballot,
+#             RESP_TOTAL_BALLOTS: total
+#         })
+#     except IntegrityException as e:
+#         return jsonify({
+#             RESP_SUCCESS: False,
+#             RESP_ERROR: str(e)
+#         }), HTTP_CONFLICT
+
+
 
 @voting_bp.route('/ballots', methods=['GET'])
 def get_ballots():

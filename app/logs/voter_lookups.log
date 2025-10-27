@@ -1,0 +1,129 @@
+2025-10-27 13:04:22,225 - WARNING - No voter data file found. Please add ../data/voters.json or ../data/voters.csv
+2025-10-27 13:07:21,709 - WARNING - No voter data file found. Please add ../data/voters.json or ../data/voters.csv
+2025-10-27 13:07:32,213 - WARNING - No voter data file found. Please add ../data/voters.json or ../data/voters.csv
+2025-10-27 13:10:17,545 - WARNING - No voter data file found. Please add ../data/voters.json or ../../data/voters.csv
+2025-10-27 13:11:13,781 - WARNING - No voter data file found. Please add ../data/voters.json or ../../data/voters.csv
+2025-10-27 13:12:16,934 - WARNING - No voter data file found. Please add ../data/voters.json or ../data/voters.csv
+2025-10-27 13:13:08,537 - INFO - Loaded 10 voters from CSV: ./app/data/voters.csv
+2025-10-27 13:14:27,633 - INFO - Loaded 10 voters from CSV: ./app/data/voters.csv
+2025-10-27 13:14:27,668 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.105:8001
+2025-10-27 13:14:27,668 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-27 13:15:59,361 - INFO - Loaded 10 voters from CSV: ./app/data/voters.csv
+2025-10-27 13:15:59,404 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.105:8001
+2025-10-27 13:15:59,404 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-27 13:16:59,204 - INFO - 192.168.1.105 - - [27/Oct/2025 13:16:59] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-10-27 13:16:59,326 - ERROR - 192.168.1.105 - - [27/Oct/2025 13:16:59] code 400, message Bad request version ('\x00"\x13\x01\x13\x03\x13\x02À+À/Ì©Ì¨À,À0À')
+2025-10-27 13:16:59,326 - INFO - 192.168.1.105 - - [27/Oct/2025 13:16:59] "[31m[1m\x16\x03\x01\x07O\x01\x00\x07K\x03\x03<RÊÏ\x112³Jþ\x9aÕö&\x15Â\x98\x94åÉ¶\x82àE\x1b¢ïáv\x0bþjO \x96è²\x81\x92ÄwÁ¿Y.$J_!¹M2û±3\x13Xs\x15\x04å[fdÎ\x1d\x00"\x13\x01\x13\x03\x13\x02À+À/Ì©Ì¨À,À0À[0m" 400 -
+2025-10-27 13:16:59,326 - ERROR - 192.168.1.105 - - [27/Oct/2025 13:16:59] code 400, message Bad request version ('¨×g\x00m>Æ{¨ÕþöÁÛ\x80ñs¢`BE½³\x9f\x9eÁÖßá\x00"\x13\x01\x13\x03\x13\x02À+À/Ì©Ì¨À,À0À')
+2025-10-27 13:16:59,326 - INFO - 192.168.1.105 - - [27/Oct/2025 13:16:59] "[31m[1m\x16\x03\x01\x02~\x01\x00\x02z\x03\x03Ï\x08í\x8a/\x90\x99mÑ\x88µ--)øË\x1a¥q\x82/¾â\x03xöìÿ#\x15\x09\x02 )1\x1e¨×g\x00m>Æ{¨ÕþöÁÛ\x80ñs¢`BE½³\x9f\x9eÁÖßá\x00"\x13\x01\x13\x03\x13\x02À+À/Ì©Ì¨À,À0À[0m" 400 -
+2025-10-27 13:17:14,022 - INFO - Loaded 10 voters from CSV: ./app/data/voters.csv
+2025-10-27 13:17:14,091 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.105:8001
+2025-10-27 13:17:14,091 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-27 13:17:48,229 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-10-27 13:17:48,377 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-10-27 13:17:48,392 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-10-27 13:17:48,408 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-10-27 13:17:48,423 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-10-27 13:17:48,445 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-10-27 13:17:48,463 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-10-27 13:17:48,476 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-10-27 13:17:48,510 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET /favicon.ico HTTP/1.1[0m" 500 -
+2025-10-27 13:17:48,596 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET /favicon.ico HTTP/1.1[0m" 500 -
+2025-10-27 13:17:48,609 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET /favicon.ico HTTP/1.1[0m" 500 -
+2025-10-27 13:17:48,703 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET /favicon.ico HTTP/1.1[0m" 500 -
+2025-10-27 13:17:48,766 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET /favicon.ico HTTP/1.1[0m" 500 -
+2025-10-27 13:17:48,779 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET /favicon.ico HTTP/1.1[0m" 500 -
+2025-10-27 13:17:48,786 - INFO - 127.0.0.1 - - [27/Oct/2025 13:17:48] "[35m[1mGET /favicon.ico HTTP/1.1[0m" 500 -
+2025-10-27 13:18:52,244 - INFO - Loaded 10 voters from CSV: ./app/data/voters.csv
+2025-10-27 13:18:52,284 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.105:8001
+2025-10-27 13:18:52,284 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-27 13:19:01,490 - INFO - 192.168.1.105 - - [27/Oct/2025 13:19:01] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-10-27 13:19:01,626 - ERROR - 192.168.1.105 - - [27/Oct/2025 13:19:01] code 400, message Bad request version ('¥\x8fí%jK\x17\x8b')
+2025-10-27 13:19:01,626 - INFO - 192.168.1.105 - - [27/Oct/2025 13:19:01] "[31m[1m\x16\x03\x01\x07O\x01\x00\x07K\x03\x03Vû?[zH<\x92\x0d\x93\x03|)t\x0d¥\x8fí%jK\x17\x8b[0m" 400 -
+2025-10-27 13:19:01,627 - ERROR - 192.168.1.105 - - [27/Oct/2025 13:19:01] code 400, message Bad request version ('KÂeg\x90;ïØw\x96')
+2025-10-27 13:19:01,631 - INFO - 192.168.1.105 - - [27/Oct/2025 13:19:01] "[31m[1m\x16\x03\x01\x02~\x01\x00\x02z\x03\x03ñw£\x02)«´é\x9f\x1ft\x96iÀ\x85?\x18Ëßj*·Ñ'\x0b\x05ãÝ\x0b*+/ KÂeg\x90;ïØw\x96[0m" 400 -
+2025-10-27 13:20:10,175 - INFO - Loaded 10 voters from CSV: ./app/data/voters.csv
+2025-10-27 13:20:10,221 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.105:8001
+2025-10-27 13:20:10,221 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-27 13:20:22,964 - INFO - 192.168.1.105 - - [27/Oct/2025 13:20:22] "GET / HTTP/1.1" 200 -
+2025-10-27 13:20:23,046 - INFO - 192.168.1.105 - - [27/Oct/2025 13:20:23] "[31m[1mGET /favicon.ico HTTP/1.1[0m" 401 -
+2025-10-27 13:31:42,563 - INFO - Loaded 10 voters from CSV: ./app/data/voters.csv
+2025-10-27 13:31:42,612 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.105:8001
+2025-10-27 13:31:42,612 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-27 13:32:29,928 - INFO - Loaded 10 voters from CSV: ./app/data/voters.csv
+2025-10-27 13:32:29,976 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.105:8001
+2025-10-27 13:32:29,976 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-27 13:34:26,616 - INFO - 192.168.1.105 - - [27/Oct/2025 13:34:26] "GET / HTTP/1.1" 200 -
+2025-10-27 13:36:23,309 - INFO - 192.168.1.105 - - [27/Oct/2025 13:36:23] "GET / HTTP/1.1" 200 -
+2025-10-27 10:50:59,323 - WARNING - No voter data file found. Please add ./app/data/voters.json or ./app/data/voters.csv
+2025-10-27 10:50:59,359 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.28:8001
+2025-10-27 10:50:59,360 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-27 10:51:04,293 - INFO - 127.0.0.1 - - [27/Oct/2025 10:51:04] "GET / HTTP/1.1" 200 -
+2025-10-27 10:51:04,656 - INFO - 127.0.0.1 - - [27/Oct/2025 10:51:04] "[31m[1mGET /favicon.ico HTTP/1.1[0m" 401 -
+2025-10-27 10:51:34,396 - INFO - 192.168.1.28 - - [27/Oct/2025 10:51:34] "GET / HTTP/1.1" 200 -
+2025-10-27 10:51:34,719 - INFO - 192.168.1.28 - - [27/Oct/2025 10:51:34] "[31m[1mGET /favicon.ico HTTP/1.1[0m" 401 -
+2025-10-27 10:52:25,490 - INFO - 127.0.0.1 - - [27/Oct/2025 10:52:25] "[32mGET /login HTTP/1.1[0m" 302 -
+2025-10-27 10:52:25,510 - INFO - 127.0.0.1 - - [27/Oct/2025 10:52:25] "GET /dashboard HTTP/1.1" 200 -
+2025-10-27 10:52:25,640 - INFO - 127.0.0.1 - - [27/Oct/2025 10:52:25] "[35m[1mGET /favicon.ico HTTP/1.1[0m" 500 -
+2025-10-27 10:57:42,179 - INFO - 127.0.0.1 - - [27/Oct/2025 10:57:42] "GET /dashboard HTTP/1.1" 200 -
+2025-10-27 10:57:42,313 - INFO - 127.0.0.1 - - [27/Oct/2025 10:57:42] "[35m[1mGET /favicon.ico HTTP/1.1[0m" 500 -
+2025-10-27 10:57:52,128 - INFO - 127.0.0.1 - - [27/Oct/2025 10:57:52] "[32mGET /login HTTP/1.1[0m" 302 -
+2025-10-27 10:57:52,153 - INFO - 127.0.0.1 - - [27/Oct/2025 10:57:52] "GET /dashboard HTTP/1.1" 200 -
+2025-10-27 10:57:52,253 - INFO - 127.0.0.1 - - [27/Oct/2025 10:57:52] "[35m[1mGET /favicon.ico HTTP/1.1[0m" 500 -
+2025-10-27 10:58:04,471 - INFO - 127.0.0.1 - - [27/Oct/2025 10:58:04] "GET / HTTP/1.1" 200 -
+2025-10-27 10:58:04,581 - INFO - 127.0.0.1 - - [27/Oct/2025 10:58:04] "[35m[1mGET /favicon.ico HTTP/1.1[0m" 500 -
+2025-10-27 11:19:47,993 - WARNING - No voter data file found. Please add ./app/data/voters.json or ./app/data/voters.csv
+2025-10-27 11:19:48,021 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.28:8001
+2025-10-27 11:19:48,021 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-27 11:20:46,775 - INFO - 127.0.0.1 - - [27/Oct/2025 11:20:46] "[31m[1mGET /public-key HTTP/1.1[0m" 401 -
+2025-10-27 11:21:51,588 - WARNING - No voter data file found. Please add ./app/data/voters.json or ./app/data/voters.csv
+2025-10-27 11:21:51,619 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.28:8001
+2025-10-27 11:21:51,619 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-27 11:21:55,452 - INFO - 127.0.0.1 - - [27/Oct/2025 11:21:55] "GET /public-key HTTP/1.1" 200 -
+2025-10-27 11:21:55,468 - INFO - 127.0.0.1 - - [27/Oct/2025 11:21:55] "[31m[1mPOST /ballot HTTP/1.1[0m" 401 -
+2025-10-27 11:22:50,253 - WARNING - No voter data file found. Please add ./app/data/voters.json or ./app/data/voters.csv
+2025-10-27 11:22:50,283 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.28:8001
+2025-10-27 11:22:50,283 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-27 11:22:54,274 - INFO - 127.0.0.1 - - [27/Oct/2025 11:22:54] "GET /public-key HTTP/1.1" 200 -
+2025-10-27 11:22:54,298 - INFO - 127.0.0.1 - - [27/Oct/2025 11:22:54] "[35m[1mPOST /ballot HTTP/1.1[0m" 500 -
+2025-10-27 11:25:45,939 - WARNING - No voter data file found. Please add ./app/data/voters.json or ./app/data/voters.csv
+2025-10-27 11:25:45,972 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.28:8001
+2025-10-27 11:25:45,972 - INFO - [33mPress CTRL+C to quit[0m
+2025-10-27 11:25:51,474 - INFO - 127.0.0.1 - - [27/Oct/2025 11:25:51] "GET /public-key HTTP/1.1" 200 -
+2025-10-27 11:25:51,596 - INFO - 127.0.0.1 - - [27/Oct/2025 11:25:51] "POST /ballot HTTP/1.1" 200 -

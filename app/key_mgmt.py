@@ -6,9 +6,13 @@ from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.exceptions import InvalidSignature
+from nacl.public import PrivateKey as CurvePrivateKey
 
-KEYDIR = Path("/app/keys")           # key storage (private never committed)
-META   = KEYDIR / "inventory.json"   # versioned inventory: kid, status, created
+from pathlib import Path
+
+KEYDIR = Path("/app/keys")          
+META   = KEYDIR / "inventory.json"   
+ENC_KEYDIR = KEYDIR / "encryption"   
 
 # ---------- meta ----------
 def load_meta() -> Dict[str, Any]:
@@ -20,7 +24,8 @@ def save_meta(meta: Dict[str, Any]):
     KEYDIR.mkdir(parents=True, exist_ok=True)
     META.write_text(json.dumps(meta, indent=2))
 
-def active_kid(meta) -> str | None:
+from typing import Optional
+def active_kid(meta) -> Optional[str]:
     for k in meta["keys"]:
         if k["status"] == "active":
             return k["kid"]
@@ -151,6 +156,38 @@ def cmd_restore(args):
     untar_to_keys(blob)
     print("Keys restored from backup.")
 
+
+# ---------- sealed-box encryption keys ----------
+
+def ensure_encryption_keys():
+    """Ensure an X25519 keypair exists for ballot encryption."""
+    ENC_KEYDIR.mkdir(parents=True, exist_ok=True)
+    priv_file = ENC_KEYDIR / "enc_priv.key"
+    pub_file = ENC_KEYDIR / "enc_pub.key"
+
+    if not (priv_file.exists() and pub_file.exists()):
+        priv = CurvePrivateKey.generate()
+        pub = priv.public_key
+        priv_file.write_bytes(priv.encode())
+        pub_file.write_bytes(pub.encode())
+        os.chmod(priv_file, 0o600)
+
+    priv = CurvePrivateKey(priv_file.read_bytes())
+    pub = priv.public_key
+    return priv, pub
+
+
+def get_encryption_public_key_b64() -> str:
+    """Return the base64-encoded public key for sealed-box encryption."""
+    _, pub = ensure_encryption_keys()
+    return base64.b64encode(pub.encode()).decode("utf-8")
+
+
+def get_encryption_private_key():
+    """Return the X25519 private key (for server-side decryption/testing only)."""
+    priv, _ = ensure_encryption_keys()
+    return priv
+
 def main():
     KEYDIR.mkdir(parents=True, exist_ok=True)
     p = argparse.ArgumentParser(prog="keytool", description="Ed25519 key mgmt + backup")
@@ -168,6 +205,9 @@ def main():
     x = sub.add_parser("restore"); x.add_argument("backup_file"); x.add_argument("--passphrase", required=True); x.set_defaults(func=cmd_restore)
 
     args = p.parse_args(); args.func(args)
+
+
+
 
 if __name__ == "__main__":
     main()

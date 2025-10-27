@@ -108,7 +108,7 @@ def before_request():
 @app.before_request
 def session_guard():
     # public routes
-    if request.path in ("/", "/login", "/logout", "/healthz", "/token", "/redeem"):
+    if request.path in ("/", "/login", "/logout", "/healthz", "/token", "/redeem", "/public-key", "/ballot"):
         return
 
     sid = request.cookies.get("sid")
