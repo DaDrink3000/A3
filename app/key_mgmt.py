@@ -8,11 +8,18 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.exceptions import InvalidSignature
 from nacl.public import PrivateKey as CurvePrivateKey
 
+import hmac
+import hashlib
+import time
 from pathlib import Path
 
 KEYDIR = Path("/app/keys")          
 META   = KEYDIR / "inventory.json"   
 ENC_KEYDIR = KEYDIR / "encryption"   
+
+
+HMAC_KEY_PATH = Path(KEYDIR) / "hmac_secret.key"
+
 
 # ---------- meta ----------
 def load_meta() -> Dict[str, Any]:
@@ -187,6 +194,33 @@ def get_encryption_private_key():
     """Return the X25519 private key (for server-side decryption/testing only)."""
     priv, _ = ensure_encryption_keys()
     return priv
+
+
+#--- Adding  functions for R5 HMAC requirement
+def ensure_hmac_key():
+    """Ensure there’s a symmetric key for HMAC integrity verification."""
+    ENC_KEYDIR.mkdir(parents=True, exist_ok=True)
+    if not HMAC_KEY_PATH.exists():
+        HMAC_KEY_PATH.write_bytes(os.urandom(32))
+        os.chmod(HMAC_KEY_PATH, 0o600)
+    return HMAC_KEY_PATH.read_bytes()
+
+def compute_hmac(data: bytes) -> str:
+    """Return a base64 HMAC tag for a data blob."""
+    key = ensure_hmac_key()
+    tag = hmac.new(key, data, hashlib.sha256).digest()
+    return base64.b64encode(tag).decode()
+
+def verify_hmac(data: bytes, tag_b64: str) -> bool:
+    """Check that the HMAC tag is valid."""
+    key = ensure_hmac_key()
+    expected = hmac.new(key, data, hashlib.sha256).digest()
+    try:
+        return hmac.compare_digest(expected, base64.b64decode(tag_b64))
+    except Exception:
+        return False
+
+
 
 def main():
     KEYDIR.mkdir(parents=True, exist_ok=True)

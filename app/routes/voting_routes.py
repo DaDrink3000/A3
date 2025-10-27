@@ -5,7 +5,10 @@ from .utils import (
     get_user_id
 )
 from services import IntegrityException # Assuming services is importable
-from key_mgmt import get_encryption_public_key_b64
+from key_mgmt import get_encryption_public_key_b64,verify_hmac
+import base64, json, time
+recent_nonces = set()
+MAX_NONCE_AGE = 60 * 5  
 
 # Initialize Blueprint
 voting_bp = Blueprint('voting', __name__)
@@ -64,41 +67,102 @@ def get_public_key():
     }), 200
 
 
-# Modified ballot endpoint
-
+# Modified ballot endpoint for R5 Requirement
 @voting_bp.route('/ballot', methods=['POST'])
 def cast_ballot():
     """
-    Accepts a sealed (encrypted) ballot from the client.
-    The server never sees the plaintext vote.
+    Accepts a sealed (encrypted) ballot envelope with HMAC integrity.
+    Required fields:
+      voter_id, ciphertext, nonce, timestamp, hmac
     """
     data = request.get_json(silent=True) or {}
-    voter_id = data.get('voter_id')
-    ciphertext = data.get('ciphertext')
-
-    if not voter_id or not ciphertext:
+    required = {"voter_id", "ciphertext", "nonce", "timestamp", "hmac"}
+    if not required.issubset(data):
         return jsonify({
-            'success': False,
-            'error': 'voter_id and ciphertext required'
+            "success": False,
+            "error": f"missing fields; required: {sorted(required)}"
         }), 400
 
-    ballot_service = get_ballot_service()  
+    voter_id = data["voter_id"]
+    ciphertext_b64 = data["ciphertext"]
+    nonce = data["nonce"]
+    ts = data["timestamp"]
+    tag = data["hmac"]
 
+    # Validate timestamp freshness
+    now = time.time()
     try:
-        ballot = ballot_service.add_ballot(voter_id, ciphertext)
+        ts = float(ts)
+    except ValueError:
+        return jsonify({"success": False, "error": "invalid timestamp"}), 400
+
+    if abs(now - ts) > MAX_NONCE_AGE:
+        return jsonify({"success": False, "error": "stale ballot timestamp"}), 400
+
+    # Replay protection
+    if nonce in recent_nonces:
+        return jsonify({"success": False, "error": "replay detected"}), 409
+    recent_nonces.add(nonce)
+
+    # Verify HMAC
+    envelope_data = f"{voter_id}:{ciphertext_b64}:{nonce}:{ts}".encode()
+    if not verify_hmac(envelope_data, tag):
+        return jsonify({"success": False, "error": "invalid HMAC"}), 401
+
+    # Optional: validate candidate ID structure in ciphertext (if included)
+    # You can later decrypt for audit/verification
+
+    # Proceed to add encrypted ballot
+    ballot_service = get_ballot_service()
+    try:
+        ballot = ballot_service.add_ballot(voter_id, ciphertext_b64)
         total = ballot_service.get_ballot_count()
 
         return jsonify({
-            'success': True,
-            'ballot': ballot,
-            'total_ballots': total
+            "success": True,
+            "ballot": ballot,
+            "total_ballots": total
         }), 200
 
     except IntegrityException as e:
         return jsonify({
-            'success': False,
-            'error': str(e)
+            "success": False,
+            "error": str(e)
         }), 409
+
+# @voting_bp.route('/ballot', methods=['POST'])
+# def cast_ballot():
+#     """
+#     Accepts a sealed (encrypted) ballot from the client.
+#     The server never sees the plaintext vote.
+#     """
+#     data = request.get_json(silent=True) or {}
+#     voter_id = data.get('voter_id')
+#     ciphertext = data.get('ciphertext')
+
+#     if not voter_id or not ciphertext:
+#         return jsonify({
+#             'success': False,
+#             'error': 'voter_id and ciphertext required'
+#         }), 400
+
+#     ballot_service = get_ballot_service()  
+
+#     try:
+#         ballot = ballot_service.add_ballot(voter_id, ciphertext)
+#         total = ballot_service.get_ballot_count()
+
+#         return jsonify({
+#             'success': True,
+#             'ballot': ballot,
+#             'total_ballots': total
+#         }), 200
+
+#     except IntegrityException as e:
+#         return jsonify({
+#             'success': False,
+#             'error': str(e)
+#         }), 409
 
 
 
