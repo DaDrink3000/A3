@@ -1,6 +1,23 @@
 from flask import Flask, request, redirect, make_response, jsonify
 from datetime import datetime, timezone
 import os, secrets
+from routes.constants import EVENT_REQUEST
+from routes.utils import get_client_ip, get_user_id
+from services import *
+from routes import *
+from routes.user_routes import user_bp # Import blueprints
+from routes.voting_routes import voting_bp
+ballot_service = BallotEvidentService()
+verification_service = BlockchainVerificationService()
+eligibility_service = EligibilityService()
+audit_service = AuditLoggingService(
+    log_dir="audit_logs",
+    rotation_when="midnight",
+    backup_count=365
+)
+user_validation_service = UserValidationService(
+    strict_mode=False,
+    allow_international_mobile=True)
 
 app = Flask(__name__)
 
@@ -81,7 +98,16 @@ def whoami():
         "last": ctx["last"].isoformat(),
         "sid_suffix": getattr(request, "sid_suffix", "none")
     })
-
+# --- Register Blueprints ---
+# User endpoints are now mounted at the root URL
+app.register_blueprint(user_bp) 
+# Voting/Core endpoints are also mounted at the root URL
+app.register_blueprint(voting_bp)
+@app.before_request
+def before_request():
+    """Set up request context - extract user from headers"""
+    # Note: 'g' is thread-local and safe for request context
+    g.user_id = request.headers.get('X-User-ID', 'anonymous')
 # guard, timeouts, rotation (R12)
 @app.before_request
 def session_guard():
@@ -126,6 +152,22 @@ def session_guard():
         request.sid_suffix = sid[-6:]
 
 @app.after_request
+def after_request(response):
+    """Log all requests after processing"""
+    # Skip health and metrics endpoints
+    if request.path not in ['/health', '/metrics']:
+        audit_service.log_event(
+            event_type=EVENT_REQUEST,
+            message=f"{request.method} {request.path}",
+            user_id=get_user_id(),
+            ip_address=get_client_ip(),
+            method=request.method,
+            path=request.path,
+            status_code=response.status_code,
+            user_agent=request.headers.get('User-Agent', 'unknown')
+        )
+    return response
+@app.after_request
 def apply_headers_and_rotation(resp):
     # --- Security Headers (R14) ---
     resp.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
@@ -164,6 +206,30 @@ def change_role():
 def healthz():
     return "ok", 200
 
+@app.errorhandler(Exception)
+def handle_error(error):
+    """Log all errors"""
+    # You'll need to re-register this in a proper BluePrint/App factory pattern
+    # but for a simple conversion, keeping it here works for unhandled exceptions.
+    audit_service.log_error(
+        error_message=str(error),
+        user_id=get_user_id(),
+        ip_address=get_client_ip(),
+        path=request.path,
+        error_type=type(error).__name__
+    )
+    return jsonify({'error': str(error)}), 500
+
+# User endpoints are now mounted at the root URL
+app.register_blueprint(user_bp) 
+    # Voting/Core endpoints are also mounted at the root URL
+app.register_blueprint(voting_bp) 
+# Log application startup
+audit_service.log_system_event(
+    "Application started",
+    version="1.0.0",
+    services=['ballot', 'verification', 'eligibility', 'audit', 'user_registration']
+)
 # --- Register R03 token endpoints ---
 try:
     from app.routes.tokens import bp as tokens_bp
@@ -172,4 +238,4 @@ except Exception as e:
     print("Warning: tokens blueprint not loaded -", e)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0", port=8001)
