@@ -18,9 +18,6 @@ LOG_FILE = './logs/voter_lookups.log'
 COLUMN_VOTER_ID = 'voter_id'
 COLUMN_DIVISION = 'division'
 
-# API Configuration
-API_HOST = '0.0.0.0'
-API_PORT = 5001
 API_DEBUG = True
 
 # HTTP Status codes
