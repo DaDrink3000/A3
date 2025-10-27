@@ -7,6 +7,10 @@ from services import *
 from routes import *
 from routes.user_routes import user_bp # Import blueprints
 from routes.voting_routes import voting_bp
+from collections import defaultdict, deque
+import time
+
+
 ballot_service = BallotEvidentService()
 verification_service = BlockchainVerificationService()
 eligibility_service = EligibilityService()
@@ -20,6 +24,12 @@ user_validation_service = UserValidationService(
     allow_international_mobile=True)
 
 app = Flask(__name__)
+
+# --- R09: DDoS and rate-limit protections ---
+RATE_LIMIT_WINDOW = 60          
+RATE_LIMIT_MAX = 60             # max requests per window per IP
+rate_limit_store = defaultdict(lambda: deque())  # ip -> timestamps deque
+
 
 # Cookie security (R08) 
 app.config.update(
@@ -105,6 +115,41 @@ def before_request():
     # Note: 'g' is thread-local and safe for request context
     g.user_id = request.headers.get('X-User-ID', 'anonymous')
 # guard, timeouts, rotation (R12)
+@app.before_request
+def rate_limit_guard():
+    """Basic per-IP rate limiting (R09)."""
+    client_ip = get_client_ip()
+    now_ts = time.time()
+    window = rate_limit_store[client_ip]
+
+    # Remove timestamps older than window
+    while window and now_ts - window[0] > RATE_LIMIT_WINDOW:
+        window.popleft()
+
+    if len(window) >= RATE_LIMIT_MAX:
+        retry_after = int(RATE_LIMIT_WINDOW - (now_ts - window[0]))
+        audit_service.log_event(
+            event_type="RATE_LIMIT",
+            message=f"Rate limit exceeded by {client_ip}",
+            user_id=get_user_id(),
+            ip_address=client_ip,
+            method=request.method,
+            path=request.path,
+            status_code=429
+        )
+        resp = jsonify({
+            "error": "Too Many Requests",
+            "success": False,
+            "retry_after": retry_after
+        })
+        resp.status_code = 429
+        resp.headers["Retry-After"] = str(retry_after)
+        return resp
+
+    # Otherwise, record the timestamp
+    window.append(now_ts)
+
+
 @app.before_request
 def session_guard():
     # public routes
