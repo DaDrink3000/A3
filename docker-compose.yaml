@@ -12,6 +12,7 @@ services:
       - ABSOLUTE_TIMEOUT_SECONDS=7200
       - ROTATE_EVERY_SECONDS=600
       - DB_PATH=/app/dbdata/db.sqlite3
+      - SIGNING_KEY_FILE=/run/secrets/signing_key
     volumes:
       - dbdata:/app/dbdata
       - backups:/app/backups
@@ -30,6 +31,7 @@ services:
       - ABSOLUTE_TIMEOUT_SECONDS=7200
       - ROTATE_EVERY_SECONDS=600
       - DB_PATH=/app/dbdata/db.sqlite3
+      - SIGNING_KEY_FILE=/run/secrets/signing_key
     volumes:
       - dbdata:/app/dbdata
       - backups:/app/backups
