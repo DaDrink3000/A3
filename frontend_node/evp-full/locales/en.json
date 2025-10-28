@@ -1,0 +1,19 @@
+{
+  "title_vote": "Cast Your Vote",
+  "vote_intro": "Enter simple preferences for demo purposes. Next, you'll see a confirm screen explaining the receipt hash.",
+  "pref": "Preference",
+  "btn_review": "Review & Continue",
+  "title_confirm": "Confirm Your Submission",
+  "receipt_title": "About your receipt hash",
+  "receipt_explain_1": "We generate a receipt hash from your ballot using a secure hash (SHA-256).",
+  "receipt_explain_2": "This code helps you confirm your ballot was included without revealing who you voted for. It is NOT reversible and cannot be used to deduce your choices.",
+  "your_receipt_code": "Your short receipt code:",
+  "full_hash": "Full hash for auditing:",
+  "acknowledge_text": "I have read and understood what the receipt hash means and does not mean.",
+  "btn_back": "Back",
+  "btn_confirm_submit": "Confirm & Submit",
+  "title_receipt": "Receipt Saved",
+  "store_code": "Please store this code safely:",
+  "note_privacy": "Reminder: The receipt hash does not reveal your selections.",
+  "btn_new_vote": "Start Over"
+}
