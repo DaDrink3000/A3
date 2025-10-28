@@ -94,7 +94,10 @@ class BallotEvidentService:
     def load_hashes(self):
         if os.path.exists(HASH_FILE):
             with open(HASH_FILE, 'r') as f:
-                return json.load(f)
+                content = f.read().strip()
+                if not content:
+                    return []
+                return json.loads(content)
         return []
     
     def save_hashes(self, hashes):
