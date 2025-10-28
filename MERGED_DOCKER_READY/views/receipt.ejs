@@ -1,9 +1,0 @@
-<h1><%= t('title_receipt') %></h1>
-<p><%= t('store_code') %> <code><%= receipt.shortCode %></code></p>
-<p class="small muted"><%= t('note_privacy') %></p>
-<% if (typeof acceptedId === 'string') { %>
-  <p class="small">Accepted ballot ID: <code><%= acceptedId %></code></p>
-<% } %>
-<div class="actions">
-  <a href="/vote" style="text-decoration:none;"><button><%= t('btn_new_vote') %></button></a>
-</div>
