@@ -29,7 +29,7 @@ if ((process.env.ENABLE_HTTPS_REDIRECT||'true').toLowerCase()==='true'){
 app.set('trust proxy', true);
 
 // Security headers
-app.use(helmet({ contentSecurityPolicy: false }));
+app.use(helmet({ contentSecurityPolicy: true }));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
