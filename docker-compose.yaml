@@ -15,6 +15,7 @@ services:
     volumes:
       - dbdata:/app/dbdata
       - backups:/app/backups
+      - ./backend_flask/A3-main/app/data:/app/data:ro  # <-- mount voters.csv here
     secrets:
       - signing_key
     restart: unless-stopped
@@ -32,6 +33,7 @@ services:
     volumes:
       - dbdata:/app/dbdata
       - backups:/app/backups
+      - ./backend_flask/A3-main/app/data:/app/data:ro  # <-- mount voters.csv here
     secrets:
       - signing_key
     restart: unless-stopped
