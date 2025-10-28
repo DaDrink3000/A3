@@ -14,54 +14,103 @@ This repository contains a multi-service web application packaged for local deve
 
 .
 ├─ backend_flask/A3-main/
+
 │  ├─ app/
+
 │  │  ├─ routes/                 # Flask blueprints/endpoints
+
 │  │  ├─ services/               # domain/services
+
 │  │  ├─ data/                   # users.jsonl / voters.csv (optional seeds)
+
 │  │  ├─ audit_logs/             # integrity/audit logs (if enabled)
+
 │  │  ├─ middleware.py           # SID rotation & timeouts 
+
 │  │  ├─ key_mgmt.py             # signing key load/rotate 
+
 │  │  ├─ main.py                 # binds to :8001 (ensure Nginx upstream matches)
+
 │  │  └─ requirements.txt
+
 │  ├─ infra/nginx/
+
 │  │  ├─ default.conf            # TLS, headers, /api -> backend, / -> frontend
+
 │  │  └─ cert/                   # self-signed TLS for localhost
+
 │  │     ├─ fullchain.pem
+
 │  │     └─ privkey.pem
+
 │  ├─ .github/workflows/
+
 │  │  ├─ security-ci.yml         # CodeQL + secret scans 
+
 │  │  └─ dependabot.yml          # dep updates 
+
 │  └─ SECURITY.md
+
 │
+
 ├─ frontend_node/evp-full/
+
 │  ├─ data/                      # UI data (if any)
+
 │  ├─ locales/                   # i18n strings
+
 │  ├─ logs/                      # UI logs (opt)
+
 │  ├─ middleware/
+
 │  │  ├─ authz.js
+
 │  │  ├─ geoAccess.js
+
 │  │  ├─ i18n.js
+
 │  │  └─ validate.js
+
 │  ├─ public/
+
 │  │  └─ confirm.js
+
 │  ├─ routes/                    # express/next-like routes (UI)
+
 │  ├─ scripts/                   # helper scripts
+
 │  ├─ utils/                     # shared helpers
+
 │  ├─ views/                     # templates/components
+
 │  ├─ .env.example               # sample env
+
 │  ├─ .env                       # runtime env (not committed)
+
 │  ├─ app.js                     # Node entry (dev server :3000)
+
 │  ├─ Dockerfile                 # frontend container
+
 │  ├─ CHECKLIST.md
+
 │  ├─ package.json
+
 │  └─ package-lock.json
+
 │
+
 ├─ scripts/
+
 │  ├─ backup.py                  # gzip snapshot to /app/backups
+
 │  └─ restore.py                 # latest snapshot -> /app/dbdata
+
 │
+
 ├─ docker-compose.yml            # all services (nginx, app1, app2, frontend, backup, restore)
+
 └─ README.md
+
 ## Architecture
 
 Client  <--HTTPS-->  Nginx :443
