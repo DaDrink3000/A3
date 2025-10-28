@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.pyc
+
+# Keys/certs – do NOT commit private material
+infra/nginx/certs/
+keys/
+.env
+*.log

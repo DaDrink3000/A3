@@ -1,0 +1,19 @@
+{
+  "title_vote": "提交投票",
+  "vote_intro": "为演示输入简单的偏好。下一步将显示确认页面并说明回执哈希。",
+  "pref": "偏好",
+  "btn_review": "检查并继续",
+  "title_confirm": "确认提交",
+  "receipt_title": "关于您的回执哈希",
+  "receipt_explain_1": "系统使用安全哈希（SHA-256）基于您的选票生成回执哈希。",
+  "receipt_explain_2": "此代码用于确认您的选票已被计入，但不会泄露您的选择。它不可逆，也不能用于推断您的投票。",
+  "your_receipt_code": "您的短回执码：",
+  "full_hash": "用于审计的完整哈希：",
+  "acknowledge_text": "我已阅读并理解回执哈希的含义及其不代表的内容。",
+  "btn_back": "返回",
+  "btn_confirm_submit": "确认并提交",
+  "title_receipt": "回执已保存",
+  "store_code": "请妥善保存此代码：",
+  "note_privacy": "提示：回执哈希不会泄露您的选择。",
+  "btn_new_vote": "重新开始"
+}

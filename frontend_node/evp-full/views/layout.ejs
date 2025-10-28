@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title><%= title %></title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", Arial, sans-serif; margin: 2rem; }
+    .card { max-width: 920px; margin: 0 auto; padding: 1.25rem 2rem; border: 1px solid #e3e3e3; border-radius: 16px; }
+    .muted { color: #555; }
+    .actions { display: flex; gap: .75rem; margin-top: 1rem; flex-wrap: wrap; }
+    button { padding: .6rem 1rem; border-radius: 10px; border: 1px solid #ddd; cursor: pointer; }
+    button.primary { border-color: #1b73e8; }
+    .lang { float: right; }
+    .checkbox { margin-top: .75rem; }
+    .small { font-size: .9rem; }
+    code { background: #f7f7f7; padding: .1rem .25rem; border-radius: 4px; }
+    a { color: inherit; }
+    .topnav { display:flex; justify-content: space-between; align-items:center; margin-bottom: 1rem; }
+    .navlinks a { margin-left: .75rem; }
+    input[type=text], input[type=password] { padding:.4rem .6rem; border:1px solid #ccc; border-radius:8px; }
+    label { font-weight:600; }
+  </style>
+</head>
+<body>
+  <div class="topnav">
+    <div><strong>EVP</strong></div>
+    <div class="navlinks">
+      <% if (user) { %>
+        <span>Signed in as <%= user.username %> (<%= user.role %>)</span>
+        <% if (user && user.role === 'admin') { %> | <a href="/admin">Admin</a> | <a href="/admin/export-tally">Export tally</a><% } %>
+        <% if (!mfaPassed && user.mfaEnabled) { %> | <a href="/auth/verify-mfa">Verify MFA</a> <% } %>
+        <% if (user && !user.mfaEnabled) { %> | <a href="/auth/setup-mfa">Setup MFA</a> <% } %>
+        | <form style="display:inline" method="POST" action="/auth/logout"><input type="hidden" name="_csrf" value="<%= csrfToken %>"/><button>Logout</button></form>
+      <% } else { %>
+        <a href="/auth/login">Staff Login</a>
+      <% } %>
+      | <a href="?lang=en">English</a> | <a href="?lang=zh">中文</a>
+    </div>
+  </div>
+  <div class="card"><%- body %></div>
+  <script src="/public/confirm.js" defer></script>
+</body>
+</html>
