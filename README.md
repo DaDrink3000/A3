@@ -1,50 +1,94 @@
-# A3 — Side-by-Side Deployment (Option A)
+**Stack:** Docker Compose, Node.js, Python/Flask, Nginx
 
-This repository bundles **both** backends side-by-side:
+## Overview
 
-- `backend_flask/A3-main/` — Flask prototype (secure APIs, MFA/RBAC, geo controls, tally API).
-- `frontend_node/evp-full/` — Node/Express full app (voting UI, admin panel, MFA, tally+export).
+This repository contains a multi-service web application packaged for local development and demo via Docker Compose. The primary frontend/server is a Node.js app (see `package.json`). A Python/Flask component is present for auxiliary services or APIs. Nginx is included as a reverse proxy in front of the app layer.
 
-They run independently; use the one you need for demos. You can run both together via Docker Compose.
+## Features
+- Express-based HTTP server
+- Server-side templating
+- TOTP-based MFA support
+- Health endpoint(s): /health, /healthz
 
-## Quick Start (Docker)
+## Directory Structure (top-level)
 
-```bash
-docker compose up --build
+```
+A3-main-code
 ```
 
-- Flask service → http://localhost:8001
-  - Example endpoints: `/public-key`, `/ballot`, `/tally`, `/staff/*`
-- Node service → http://localhost:3000
-  - UI pages: voting and admin flows, TOTP setup/verify, etc.
+## Getting Started
 
-### Environment
-
-- Flask: see `backend_flask/A3-main/app/requirements.txt` and `main.py` for env variables like `ALLOWED_CIDRS`, `ALLOWED_COUNTRY`.
-- Node: configure `frontend_node/evp-full/.env` (copied from `.env.example`). Make sure `SESSION_SECRET`, `RECEIPT_PEPPER` are strong, random values.
-
-## Local (without Docker)
-
-**Flask**
-
+Copy the example environment:
 ```bash
-cd backend_flask/A3-main/app
-python -m venv .venv && source .venv/bin/activate  # or .venv\Scripts\activate on Windows
-pip install -r requirements.txt
-export FLASK_APP=main.py
-python main.py  # or: python -m flask run --host=0.0.0.0 --port=8001
+cp .env.example .env
+# then edit values as needed
+```
+Install Node.js dependencies (optional if using Docker):
+```bash
+npm install
+npm run dev   # or: npm start
+```
+Run with Docker Compose:
+```bash
+docker compose -f docker-compose.yaml up --build
 ```
 
-**Node**
+## Configuration
 
-```bash
-cd frontend_node/evp-full
-cp .env.example .env  # then edit the secrets
-npm ci
-npm start
+Environment variables expected (from `.env.example`):
+```
+ADMIN_PASSWORD
+ALLOWLIST_CIDRS
+AUDIT_HMAC_KEY
+AUDIT_LOG
+COOKIE_SECURE
+DEFAULT_LANG
+DEFAULT_STAFF_PASSWORD
+ENABLE_HTTPS_REDIRECT
+GEO_COUNTRY
+GEO_DEFAULT_COUNTRY
+GEO_ENABLE
+NODE_ENV
+PORT
+RECEIPT_PEPPER
+SESSION_SECRET
 ```
 
-## Notes
-- For HTTPS demos: put both behind a reverse proxy (nginx/Traefik) or enable HTTPS in your environment.
-- Production: set `COOKIE_SECURE=true` in Node `.env`, and serve Flask behind TLS (HSTS is set by Flask already).
-- You can evolve the Node app to call the Flask APIs if you want a split UI/API architecture, but this bundle intentionally keeps them independent.
+## Services
+
+**A3-main-code/docker-compose.yaml**
+- `app1` → ports: none | image/build: ./backend_flask/A3-main/app
+- `app2` → ports: none | image/build: ./backend_flask/A3-main/app
+- `frontend` → ports: 3000:3000 | image/build: build context
+- `nginx` → ports: 80:80, 443:443 | image/build: nginx:stable
+- `backup` → ports: none | image/build: python:3.12-slim
+- `restore` → ports: none | image/build: python:3.12-slim
+
+## Local URLs
+
+- Reverse proxy: http://localhost
+- App service: http://localhost:3000
+- Health: http://localhost/health
+- Health: http://localhost/healthz
+
+## NPM Scripts
+
+- **start**: `node app.js`
+- **dev**: `NODE_ENV=development HOST=0.0.0.0 PORT=3000 node app.js`
+- **test**: `jest --runInBand`
+- **lint**: `eslint . || true`
+- **audit**: `npm audit --audit-level=high || true`
+- **check**: `npm run lint && npm run audit`
+
+## Troubleshooting
+
+- If a container shows as **unhealthy**, check its logs:
+  ```bash
+docker compose logs <service>
+  ```
+- On Windows/PowerShell, set env vars with `setx` or use a `.env` file instead of `export`.
+- If port 80 is in use, change the host port in the compose file (e.g., `8080:80`) and visit `http://localhost:8080`.
+
+## License
+
+MIT (or as specified by your course/repo policy). Update as needed.
