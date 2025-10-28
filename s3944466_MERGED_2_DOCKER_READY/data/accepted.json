@@ -1,0 +1,50 @@
+[
+  {
+    "id": "15f19f13-7439-480c-b51f-b9ad65ff01ed",
+    "ballot": {
+      "election": "house",
+      "preferences": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    "ts": "2025-10-22T04:51:27.130Z"
+  },
+  {
+    "id": "02a3cce1-3755-48d0-bf13-fa41e0f881a3",
+    "ballot": {
+      "election": "house",
+      "preferences": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    "ts": "2025-10-22T04:55:53.482Z"
+  },
+  {
+    "id": "608e52c4-a87c-46f0-8603-35f76df77db1",
+    "ballot": {
+      "election": "house",
+      "preferences": [
+        "a",
+        "s",
+        "s"
+      ]
+    },
+    "ts": "2025-10-22T04:56:00.799Z"
+  },
+  {
+    "id": "e842082f-de1d-4430-bb88-a8cf65ad3335",
+    "ballot": {
+      "election": "house",
+      "preferences": [
+        "a",
+        "c",
+        "d"
+      ]
+    },
+    "ts": "2025-10-22T05:07:09.332Z"
+  }
+]

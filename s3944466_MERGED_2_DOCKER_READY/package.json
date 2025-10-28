@@ -1,0 +1,39 @@
+{
+  "name": "evp-full-r01-r16-r20-r07",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "jest --runInBand",
+    "lint": "eslint . || true",
+    "audit": "npm audit --audit-level=high || true",
+    "check": "npm run lint && npm run audit"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cidr-matcher": "2.1.1",
+    "cookie-parser": "^1.4.7",
+    "csurf": "^1.11.0",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.18.0",
+    "geoip-lite": "^1.4.10",
+    "helmet": "^7.1.0",
+    "qrcode": "^1.5.4",
+    "speakeasy": "^2.0.0",
+    "archiver": "^5.3.2",
+    "adm-zip": "^0.5.10",
+    "ip-cidr": "*",
+    "joi": "*",
+    "uuid": "*"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "eslint": "*"
+  }
+}

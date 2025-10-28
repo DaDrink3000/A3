@@ -1,0 +1,12 @@
+{
+  "vote.title": "Votar",
+  "vote.choice": "Tu elecci\u00f3n",
+  "vote.next": "Siguiente",
+  "confirm.title": "Confirma tu voto",
+  "confirm.explain": "Tu hash de recibo es un c\u00f3digo aleatorio que prueba que tu voto fue registrado pero no revela tu elecci\u00f3n.",
+  "confirm.example": "Ejemplo (no es tu recibo real):",
+  "confirm.understood": "Entiendo",
+  "confirm.submit": "Enviar",
+  "receipt.title": "Recibo",
+  "receipt.hash": "Tu hash de recibo"
+}
