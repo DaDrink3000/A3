@@ -2,13 +2,13 @@
 
 ## Overview
 
-This repository contains a multi-service web application packaged for local development and demo via Docker Compose. The primary frontend/server is a Node.js app (see `package.json`). A Python/Flask component is present for auxiliary services or APIs. Nginx is included as a reverse proxy in front of the app layer.
+
 
 ## Features
 - Express-based HTTP server
 - Server-side templating
 - TOTP-based MFA support
-- Health endpoint(s): /health, /healthz
+- Health endpoint(s): /api/health, /api/healthz
 
 ## Directory Structure (top-level)
 
@@ -143,26 +143,19 @@ docker compose ps
 docker compose exec backup bash -lc "python /scripts/backup.py"
 docker compose run --rm restore
 
-## Configuration
+### CI / Security pipeline
+.github/workflows/security-ci.yml:
+CodeQL (Python + JavaScript)
+Gitleaks secret scanning (results.sarif uploaded to code scanning)
+Workflow fails on high/critical findings (merge-blocking)
+dependabot.yml:
+Updates npm / pip dependencies on a schedule; opens PRs with suggested bumps
+Viewing results:
+Push to GitHub with Actions enabled.
+Check Security → Code scanning alerts for CodeQL / SARIF uploads.
+Check Actions tab for deps-and-secrets run output.
 
-Environment variables expected (from `.env.example`):
-```
-ADMIN_PASSWORD
-ALLOWLIST_CIDRS
-AUDIT_HMAC_KEY
-AUDIT_LOG
-COOKIE_SECURE
-DEFAULT_LANG
-DEFAULT_STAFF_PASSWORD
-ENABLE_HTTPS_REDIRECT
-GEO_COUNTRY
-GEO_DEFAULT_COUNTRY
-GEO_ENABLE
-NODE_ENV
-PORT
-RECEIPT_PEPPER
-SESSION_SECRET
-```
+
 
 ## Services
 
@@ -178,17 +171,9 @@ SESSION_SECRET
 
 - Reverse proxy: http://localhost
 - App service: http://localhost:3000
-- Health: http://localhost/health
-- Health: http://localhost/healthz
+- Health: http://localhost/api/health
+- Health: http://localhost/api/healthz
 
-## NPM Scripts
-
-- **start**: `node app.js`
-- **dev**: `NODE_ENV=development HOST=0.0.0.0 PORT=3000 node app.js`
-- **test**: `jest --runInBand`
-- **lint**: `eslint . || true`
-- **audit**: `npm audit --audit-level=high || true`
-- **check**: `npm run lint && npm run audit`
 
 ## Troubleshooting
 
