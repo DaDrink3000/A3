@@ -1,0 +1,25 @@
+<h1><%= t('title_confirm') %></h1>
+
+<p><strong><%= t('receipt_title') %></strong></p>
+<p class="small">
+  <%= t('receipt_explain_1') %><br/><br/>
+  <%= t('receipt_explain_2') %>
+</p>
+
+<p><%= t('your_receipt_code') %> <code><%= receipt.shortCode %></code></p>
+<p class="muted small"><%= t('full_hash') %> <code><%= receipt.hashHex %></code></p>
+
+<form id="confirmForm" method="POST" action="/vote/submit">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+  <label class="checkbox">
+    <input type="checkbox" id="ack" />
+    <span><%= t('acknowledge_text') %></span>
+  </label>
+
+  <div class="actions">
+    <a href="/vote" style="text-decoration:none;">
+      <button type="button"><%= t('btn_back') %></button>
+    </a>
+    <button id="submitBtn" class="primary" type="submit" disabled><%= t('btn_confirm_submit') %></button>
+  </div>
+</form>

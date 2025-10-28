@@ -1,0 +1,15 @@
+<h1><%= t('title_vote') %></h1>
+<p class="muted"><%= t('vote_intro') %></p>
+
+<form method="POST" action="/vote/confirm">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+  <label><%= t('pref') %> 1</label><br/>
+  <input name="pref1" required placeholder="Candidate A"/><br/><br/>
+  <label><%= t('pref') %> 2</label><br/>
+  <input name="pref2" placeholder="Candidate B"/><br/><br/>
+  <label><%= t('pref') %> 3</label><br/>
+  <input name="pref3" placeholder="Candidate C"/><br/><br/>
+  <div class="actions">
+    <button class="primary" type="submit"><%= t('btn_review') %></button>
+  </div>
+</form>

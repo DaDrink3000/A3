@@ -1,0 +1,112 @@
+# docker-compose.yml  (Compose v2 – version key omitted)
+
+services:
+  # --- Flask Backend Replicas ---
+  app1:
+    build: ./backend_flask/A3-main/app
+    container_name: a3_backend_1
+    expose:
+      - "8000"
+    environment:
+      - IDLE_TIMEOUT_SECONDS=900
+      - ABSOLUTE_TIMEOUT_SECONDS=7200
+      - ROTATE_EVERY_SECONDS=600
+      - DB_PATH=/app/dbdata/db.sqlite3
+    volumes:
+      - dbdata:/app/dbdata
+      - backups:/app/backups
+    secrets:
+      - signing_key
+    restart: unless-stopped
+
+  app2:
+    build: ./backend_flask/A3-main/app
+    container_name: a3_backend_2
+    expose:
+      - "8000"
+    environment:
+      - IDLE_TIMEOUT_SECONDS=900
+      - ABSOLUTE_TIMEOUT_SECONDS=7200
+      - ROTATE_EVERY_SECONDS=600
+      - DB_PATH=/app/dbdata/db.sqlite3
+    volumes:
+      - dbdata:/app/dbdata
+      - backups:/app/backups
+    secrets:
+      - signing_key
+    restart: unless-stopped
+
+  # --- Node Frontend ---
+  frontend:
+    build:
+      context: ./frontend_node/evp-full
+      dockerfile: Dockerfile
+    container_name: a3_frontend
+    env_file:
+      - ./frontend_node/evp-full/.env
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0        # bind to all interfaces inside container
+      - PORT=3000
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"         # <-- new line: allows http://localhost:3000
+    volumes:
+      - ./frontend_node/evp-full:/usr/src/app
+    working_dir: /usr/src/app
+    command: ["npm", "start"]
+    depends_on:
+      - app1
+      - app2
+    restart: unless-stopped
+
+  # --- Nginx Reverse Proxy ---
+  nginx:
+    image: nginx:stable
+    container_name: a3_nginx
+    depends_on:
+      - frontend
+      - app1
+      - app2
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./backend_flask/A3-main/infra/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./backend_flask/A3-main/infra/nginx/certs:/etc/nginx/certs:ro
+    restart: unless-stopped
+
+  # --- Nightly Backup (R19) ---
+  backup:
+    image: python:3.12-slim
+    volumes:
+      - ./backend_flask/A3-main/scripts:/scripts:ro
+      - dbdata:/app/dbdata
+      - backups:/app/backups
+    entrypoint: [ "bash", "-lc", "while true; do python /scripts/backup.py; sleep 86400; done" ]
+    restart: unless-stopped
+
+  # --- On-demand Restore (R19) ---
+  restore:
+    image: python:3.12-slim
+    volumes:
+      - ./backend_flask/A3-main/scripts:/scripts:ro
+      - dbdata:/app/dbdata
+      - backups:/app/backups
+    entrypoint:
+      - bash
+      - -lc
+      - >
+        f=$$(ls -1t /app/backups | head -n1);
+        if [ -n "$$f" ]; then python /scripts/restore.py "$$f";
+        else echo 'No backups found'; exit 1; fi
+    restart: "no"
+
+volumes:
+  dbdata:
+  backups:
+
+secrets:
+  signing_key:
+    file: ./backend_flask/A3-main/infra/signing_key.pem
