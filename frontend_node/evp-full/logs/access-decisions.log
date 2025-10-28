@@ -88,3 +88,10 @@
 {"ts":"2025-10-28T12:13:06.100Z","ip":"172.20.0.1","path":"/auth/login","decision":"ALLOW","reason":"CIDR_ALLOW"}
 {"ts":"2025-10-28T12:13:21.484Z","ip":"::ffff:172.20.0.1","path":"/vote","decision":"ALLOW","reason":"CIDR_ALLOW"}
 {"ts":"2025-10-28T12:13:22.888Z","ip":"::ffff:172.20.0.1","path":"/vote","decision":"ALLOW","reason":"CIDR_ALLOW"}
+{"ts":"2025-10-28T12:39:51.457Z","ip":"::ffff:172.20.0.1","path":"/","decision":"ALLOW","reason":"CIDR_ALLOW"}
+{"ts":"2025-10-28T12:39:51.669Z","ip":"::ffff:172.20.0.1","path":"/vote","decision":"ALLOW","reason":"CIDR_ALLOW"}
+{"ts":"2025-10-28T12:39:52.827Z","ip":"::ffff:172.20.0.1","path":"/favicon.ico","decision":"ALLOW","reason":"CIDR_ALLOW"}
+{"ts":"2025-10-28T12:39:58.981Z","ip":"::ffff:172.20.0.1","path":"/vote","decision":"ALLOW","reason":"CIDR_ALLOW"}
+{"ts":"2025-10-28T16:45:17.495Z","ip":"::ffff:172.20.0.1","path":"/","decision":"ALLOW","reason":"CIDR_ALLOW"}
+{"ts":"2025-10-28T16:45:17.539Z","ip":"::ffff:172.20.0.1","path":"/vote","decision":"ALLOW","reason":"CIDR_ALLOW"}
+{"ts":"2025-10-28T16:45:18.608Z","ip":"::ffff:172.20.0.1","path":"/favicon.ico","decision":"ALLOW","reason":"CIDR_ALLOW"}
