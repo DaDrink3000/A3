@@ -17,7 +17,6 @@ LOG_FILE = './logs/voter_lookups.log'
 # CSV/JSON column names
 COLUMN_VOTER_ID = 'voter_id'
 COLUMN_DIVISION = 'division'
-
 API_DEBUG = True
 
 # HTTP Status codes

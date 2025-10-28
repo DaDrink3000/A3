@@ -250,8 +250,6 @@ def healthz():
 @app.errorhandler(Exception)
 def handle_error(error):
     """Log all errors"""
-    # You'll need to re-register this in a proper BluePrint/App factory pattern
-    # but for a simple conversion, keeping it here works for unhandled exceptions.
     audit_service.log_error(
         error_message=str(error),
         user_id=get_user_id(),

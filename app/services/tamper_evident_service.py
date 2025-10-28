@@ -58,17 +58,13 @@ class BallotEvidentService:
         # The lock file path remains the same
         lock_file_path = f"{file_path}.lock"
         
-        # We use portalocker.Lock as a context manager
-        # Mode 'w' creates the file if it doesn't exist
         lock = Lock(
             filename=lock_file_path,
             mode='w',
-            timeout=5,  # Optional: Wait up to 5 seconds for the lock
-            fail_when_locked=False, # Wait for the lock if busy
+            timeout=5, 
+            fail_when_locked=False,
         )
         
-        # When entering the 'with lock:', portalocker acquires the lock
-        # When exiting the 'with lock:', portalocker releases the lock
         with lock:
             try:
                 # Execution continues inside the 'with self.file_lock(..):' block
