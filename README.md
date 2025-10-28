@@ -2,7 +2,7 @@
 
 ## Overview
 
-
+This project is a containerised secure-voting prototype that shows defence-in-depth from the edge (TLS, headers) to the app (session hardening, key rotation) to the SDLC (automated security analysis and dependency hygiene), with operational controls (backup/restore) — all in a reproducible, Dockerised setup.
 
 ## Features
 - Express-based HTTP server
@@ -114,9 +114,13 @@
 ## Architecture
 
 Client  <--HTTPS-->  Nginx :443
+
                         ├─ "/"         -> Frontend (Node :3000)
+                        
                         └─ "/api/*"    -> Flask pool (app1, app2 :8001)
+
                                            └─ SQLite @ /app/dbdata/db.sqlite3
+                                           
 Nightly backup  -> /app/backups  (gz snapshots)
 On-demand restore -> restores latest snapshot to dbdata
 
@@ -178,12 +182,18 @@ Check Actions tab for deps-and-secrets run output.
 ## Troubleshooting
 
 - If a container shows as **unhealthy**, check its logs:
-  ```bash
+ 
 docker compose logs <service>
-  ```
+  
 - On Windows/PowerShell, set env vars with `setx` or use a `.env` file instead of `export`.
 - If port 80 is in use, change the host port in the compose file (e.g., `8080:80`) and visit `http://localhost:8080`.
+- 502 Bad Gateway: Flask/Nginx port mismatch:
+  
+docker compose logs app1 | findstr /i "Running on http://"
+docker compose restart nginx
 
+- PowerShell’s fake curl: Use real curl or un-alias:
+C:\Windows\System32\curl.exe -k https://localhost/api/healthz
 ## License
 
-MIT (or as specified by your course/repo policy). Update as needed.
+Academic assignment project; internal dependencies under their respective licenses.
