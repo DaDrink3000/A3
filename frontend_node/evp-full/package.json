@@ -21,7 +21,7 @@
     "csurf": "^1.11.0",
     "dotenv": "16.4.5",
     "ejs": "^3.1.10",
-    "express": "^4.19.2",
+    "express": "^4.22.1",
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.18.0",
     "geoip-lite": "^1.4.10",
